@@ -18,24 +18,23 @@ O objetivo é gerenciar limites de crédito de clientes, com auditoria e regras 
 - **Bean Validation** para validações  
 - **@ControllerAdvice** para tratamento centralizado de erros  
 
----
-
-
-
-
-
 ## 📂 Estrutura do Projeto
-
 ```
-
 src/main/java/com/douglas/suitpay
 ├──> controller # Controllers REST
+
 ├──> domain # Entidades (Customer, CreditLimitHistory, User, Role)
+
 ├──> dto # DTOs (requests/responses)
+
 ├──> exception # Exceções e handlers
+
 ├──> repository # Repositórios JPA
+
 ├──> security # Configuração JWT + Security
+
 ├──> service # Regras de negócio (interfaces + impl)
+
 └──> BootSeed.java # Seed inicial (roles + admin)
 
 Evidências dos testes funcionais: 
