@@ -1,0 +1,227 @@
+{
+  "info": {
+    "name": "SuitPay Credit Limit API (JWT + Users) — FULL",
+    "_postman_id": "a7b4f6b2-1c3d-4e7a-8f9b-0aa1bb22cc33",
+    "description": "Coleção com autenticação JWT (login/refresh), criação de usuários (signup/admin), customers e credit limit. Collection usa auth Bearer {{access_token}} herdada para todas as requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{access_token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080" },
+    { "key": "username", "value": "admin" },
+    { "key": "password", "value": "123456" },
+    { "key": "admin_username", "value": "admin" },
+    { "key": "admin_password", "value": "123456" },
+    { "key": "access_token", "value": "" },
+    { "key": "refresh_token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup (create USER)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"novo_user\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/signup", "host": ["{{base_url}}"], "path": ["auth","signup"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth","login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let ok = pm.response.code === 200;",
+                  "pm.test('Status 200 no login', () => pm.expect(ok).to.be.true);",
+                  "let res = {};",
+                  "try { res = pm.response.json(); } catch(e) {}",
+                  "if(res && res.accessToken){ pm.collectionVariables.set('access_token', res.accessToken); }",
+                  "if(res && res.refreshToken){ pm.collectionVariables.set('refresh_token', res.refreshToken); }",
+                  "pm.test('Salvou access_token', () => pm.expect(pm.collectionVariables.get('access_token')).to.exist);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login (as Admin)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{admin_username}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth","login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let res = {}; try { res = pm.response.json(); } catch(e) {}",
+                  "if(res && res.accessToken){ pm.collectionVariables.set('access_token', res.accessToken); }",
+                  "if(res && res.refreshToken){ pm.collectionVariables.set('refresh_token', res.refreshToken); }",
+                  "pm.test('Login admin: access_token definido', () => pm.expect(pm.collectionVariables.get('access_token')).to.exist);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refresh_token}}\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/refresh", "host": ["{{base_url}}"], "path": ["auth","refresh"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let res = {}; try { res = pm.response.json(); } catch(e) {}",
+                  "if(res && res.accessToken){ pm.collectionVariables.set('access_token', res.accessToken); }",
+                  "if(res && res.refreshToken){ pm.collectionVariables.set('refresh_token', res.refreshToken); }",
+                  "pm.test('Refresh: access_token atualizado', () => pm.expect(pm.collectionVariables.get('access_token')).to.exist);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Me (whoami)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/auth/me", "host": ["{{base_url}}"], "path": ["auth","me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin - Create User with Roles",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"novo_admin\",\n  \"password\": \"123456\",\n  \"roles\": [\"ROLE_CREDIT_LIMIT_ADMIN\", \"ROLE_USER\"]\n}"
+            },
+            "url": { "raw": "{{base_url}}/admin/users", "host": ["{{base_url}}"], "path": ["admin","users"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"isVip\": false,\n  \"creditLimit\": 500.00\n}" },
+            "url": { "raw": "{{base_url}}/customers", "host": ["{{base_url}}"], "path": ["customers"] }
+          }
+        },
+        {
+          "name": "Create VIP Customer",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"isVip\": true,\n  \"creditLimit\": 2000.00\n}" },
+            "url": { "raw": "{{base_url}}/customers", "host": ["{{base_url}}"], "path": ["customers"] }
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/customers/1", "host": ["{{base_url}}"], "path": ["customers","1"] }
+          }
+        },
+        {
+          "name": "List Customers (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers?page=0&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["customers"],
+              "query": [ { "key": "page", "value": "0" }, { "key": "size", "value": "10" } ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Credit Limit",
+      "item": [
+        {
+          "name": "Get Credit Limit",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/customers/1/credit-limit", "host": ["{{base_url}}"], "path": ["customers","1","credit-limit"] }
+          }
+        },
+        {
+          "name": "Update Credit Limit (ADMIN only)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"newLimit\": 1500.00\n}" },
+            "url": { "raw": "{{base_url}}/customers/1/credit-limit", "host": ["{{base_url}}"], "path": ["customers","1","credit-limit"] }
+          }
+        },
+        {
+          "name": "Get Credit Limit History (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/1/credit-limit/history?page=0&size=5",
+              "host": ["{{base_url}}"],
+              "path": ["customers","1","credit-limit","history"],
+              "query": [ { "key": "page", "value": "0" }, { "key": "size", "value": "5" } ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
