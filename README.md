@@ -171,7 +171,7 @@ Ela inclui:
 
 ---
 
-## ✅ Critérios de Aceite (Checklist)
+## ✅ (Checklist)
 
 * [x] Consulta de limite atual
 * [x] Atualização com regras + auditoria
