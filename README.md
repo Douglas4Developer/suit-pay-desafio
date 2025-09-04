@@ -20,14 +20,7 @@ O objetivo é gerenciar limites de crédito de clientes, com auditoria e regras 
 
 ---
 
-<img width="1689" height="933" alt="image" src="https://github.com/user-attachments/assets/0982795f-2c18-454a-81ed-2a30e79ab538" />
-<img width="608" height="337" alt="image" src="https://github.com/user-attachments/assets/7bdfd340-1c1f-4635-b625-53687292f2fa" />
-<img width="1764" height="543" alt="image" src="https://github.com/user-attachments/assets/17088fc5-0a43-4ae2-a28b-82792017d748" />
-<img width="1476" height="496" alt="image" src="https://github.com/user-attachments/assets/a83e3022-9fbf-4bc1-b919-f755efab9b47" />
-# Sem a ROLE CREDIT_LIMIT_ADMIN
-<img width="1475" height="521" alt="image" src="https://github.com/user-attachments/assets/ef486c4a-e31b-456e-9bb2-348bc6978c55" />
-# Com a ROLE CREDIT_LIMIT_ADMIN
-<img width="1483" height="578" alt="image" src="https://github.com/user-attachments/assets/b36d0e79-4ee7-4736-b447-726f24ec20df" />
+
 
 
 
@@ -36,15 +29,24 @@ O objetivo é gerenciar limites de crédito de clientes, com auditoria e regras 
 ```
 
 src/main/java/com/douglas/suitpay
-├── controller     # Controllers REST
-├── domain        # Entidades (Customer, CreditLimitHistory, User, Role)
-├── dto           # DTOs (requests/responses)
-├── exception     # Exceções e handlers
-├── repository    # Repositórios JPA
-├── security      # Configuração JWT + Security
-├── service       # Regras de negócio (interfaces + impl)
-└── BootSeed.java # Seed inicial (roles + admin)
+├──> controller # Controllers REST
+├──> domain # Entidades (Customer, CreditLimitHistory, User, Role)
+├──> dto # DTOs (requests/responses)
+├──> exception # Exceções e handlers
+├──> repository # Repositórios JPA
+├──> security # Configuração JWT + Security
+├──> service # Regras de negócio (interfaces + impl)
+└──> BootSeed.java # Seed inicial (roles + admin)
 
+Evidências dos testes funcionais: 
+<img width="1689" height="933" alt="image" src="https://github.com/user-attachments/assets/0982795f-2c18-454a-81ed-2a30e79ab538" />
+<img width="608" height="337" alt="image" src="https://github.com/user-attachments/assets/7bdfd340-1c1f-4635-b625-53687292f2fa" />
+<img width="1764" height="543" alt="image" src="https://github.com/user-attachments/assets/17088fc5-0a43-4ae2-a28b-82792017d748" />
+<img width="1476" height="496" alt="image" src="https://github.com/user-attachments/assets/a83e3022-9fbf-4bc1-b919-f755efab9b47" />
+# Sem a ROLE CREDIT_LIMIT_ADMIN
+<img width="1475" height="521" alt="image" src="https://github.com/user-attachments/assets/ef486c4a-e31b-456e-9bb2-348bc6978c55" />
+# Com a ROLE CREDIT_LIMIT_ADMIN
+<img width="1483" height="578" alt="image" src="https://github.com/user-attachments/assets/b36d0e79-4ee7-4736-b447-726f24ec20df" />
 ````
 
 ---
